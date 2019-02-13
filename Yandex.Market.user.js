@@ -30,7 +30,7 @@
         var span = elem.parentElement.parentElement.parentElement.querySelector(".n-snippet-card2__reasons-to-buy-item:last-child .n-reasons-to-buy__label");
         var total2 = span ? parseInt(span.textContent.split(/\s+/)[0]) : 0;
         var p2 = total2 > 0 ? Math.floor( (cnt[3]+cnt[4])*100/Math.max(total2,total) + 0.5 ) : "&mdash;";
-        elem.innerHTML = "Отрицательных "+p+"/"+p2+"%";
+        elem.innerHTML = "РћС‚СЂРёС†Р°С‚РµР»СЊРЅС‹С… "+p+"/"+p2+"%";
         if (p <= 17) { elem.style.color = "green"; }
         //console.log(cnt, total)
       }
