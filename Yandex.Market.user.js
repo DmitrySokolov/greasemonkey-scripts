@@ -67,7 +67,8 @@
     }
   }
   function startObserve(o) {
-    var n = document.querySelector(".n-snippet-list");
+    //var n = document.querySelector(".n-snippet-list");
+    var n = document.querySelector(".n-filter-applied-results__content");
     o.observe(n, {attributes: false, childList: true, subtree: true});
   }
 
