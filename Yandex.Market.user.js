@@ -52,16 +52,18 @@
         cards[i].appendChild(d);
         var a = cards[i].parentElement.parentElement.querySelector("a.n-snippet-card2__rating");
         if (a) {
-          var req = new XMLHttpRequest();
-          req.open("GET", a.href, /*async*/true);
-          req.responseType = "document";
-          req.addEventListener("load", updateRating(d, counter), false);
-          req.addEventListener("loadend", (e) => {
-            counter.val += 1;
-            //console.log("-- status: "+e.target.status+", counter: "+counter.val+" / "+counter.max);
-          }, false);
-          req.send();
-          counter.max += 1;
+          setTimeout((el_, a_, c_) => {
+          	var req = new XMLHttpRequest();
+          	req.open("GET", a_.href, /*async*/true);
+          	req.responseType = "document";
+          	req.addEventListener("load", updateRating(el_, c_), false);
+          	req.addEventListener("loadend", (e) => {
+	            c_.val += 1;
+	            //console.log("-- status: "+e.target.status+", counter: "+c_.val+" / "+c_.max);
+	          }, false);
+	          req.send();
+	          c_.max += 1;
+          }, Math.random()*300+200, d, a, counter);
         }
       }
     }
