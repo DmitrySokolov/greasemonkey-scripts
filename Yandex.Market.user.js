@@ -3,7 +3,7 @@
 // @namespace   yandex_market
 // @include     https://market.yandex.ru/*
 // @include     http://market.yandex.ru/*
-// @version     1
+// @version     2
 // @grant       none
 // ==/UserScript==
 !function() {
@@ -35,22 +35,22 @@
       }
     }
   }
+
   const RSTAT = "rstat";
+
   function startCardsUpdating(counter) {
     //console.log("--- startCardsUpdating ---");
     counter.max = 0;
     counter.val = 0;
-    var cards = document.querySelectorAll(".n-snippet-card2__part_type_right .n-snippet-card2__bottom");
-    for (var i = 0; i < cards.length; i += 1) {
-      if (!cards[i].querySelector("."+RSTAT)) {
-        var d = document.createElement("div");
-        d.className = RSTAT;
-        d.innerHTML = "??%";
-        d.style.color = "red";
-        d.style.textAlign = "right";
-        d.style.marginBottom = "0.5rem";
-        cards[i].appendChild(d);
-        var a = cards[i].parentElement.parentElement.querySelector("a.n-snippet-card2__rating");
+    var elem = document.querySelectorAll(".n-snippet-card2__part_type_center .n-snippet-card2__header-stickers");
+    for (var i = 0; i < elem.length; i += 1) {
+      if (!elem[i].querySelector("."+RSTAT)) {
+        var el = document.createElement("span");
+        el.className = RSTAT;
+        el.innerHTML = "??%";
+        el.style.color = "red";
+        elem[i].appendChild(el);
+        var a = elem[i].querySelector("a.n-snippet-card2__rating");
         if (a) {
           setTimeout((el_, a_, c_) => {
           	var req = new XMLHttpRequest();
@@ -63,11 +63,12 @@
 	          }, false);
 	          req.send();
 	          c_.max += 1;
-          }, Math.random()*300+200, d, a, counter);
+          }, Math.random()*300+200, el, a, counter);
         }
       }
     }
   }
+
   function startObserve(o) {
     //var n = document.querySelector(".n-snippet-list");
     var n = document.querySelector(".n-filter-applied-results__content");
@@ -75,6 +76,7 @@
   }
 
   var counter = {val: 0, max: 0, done: true};
+ 
   startCardsUpdating(counter);
 
   startObserve(new MutationObserver((mutationsList, observer) => {
