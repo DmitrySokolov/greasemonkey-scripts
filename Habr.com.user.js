@@ -1,15 +1,10 @@
 // ==UserScript==
 // @name        Habr.com
 // @namespace   habr
-// @include     https://habr.com/post/*
-// @include     https://habr.com/company/*
-// @include     https://habrahabr.ru/post/*
-// @include     https://habrahabr.ru/company/*
-// @include     https://geektimes.com/post/*
-// @include     https://geektimes.com/company/*
-// @include     https://geektimes.ru/post/*
-// @include     https://geektimes.ru/company/*
-// @version     3
+// @include     https://habr.com/*/post/*
+// @include     https://habr.com/*/company/*
+// @include     https://habr.com/*/news/*
+// @version     4
 // @grant       none
 // ==/UserScript==
 !function(){
@@ -56,4 +51,25 @@
       }
     }
   }();
+  !function addStyle(cssStr) {
+    var D = document;
+    var elem = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
+    var newStyle = D.createElement('style');
+    newStyle.textContent = cssStr;
+    elem.appendChild(newStyle);
+  } ('.post__text {\
+        font-family: Noto Sans !important;\
+        font-size: 20px !important;\
+      }\
+      .post__text h3 {\
+        font-family: Noto Sans !important;\
+        font-size: 1.2em !important;\
+      }\
+      .layout__cell_body {\
+        max-width: 1750px !important;\
+      }\
+      .sidebar_right .sidebar_content-area {\
+        margin-left: -250px !important;\
+      }\
+     ');
 }();
