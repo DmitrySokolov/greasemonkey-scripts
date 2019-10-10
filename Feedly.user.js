@@ -30,7 +30,7 @@
       .entryBody .content {\
         font-family: Noto Serif !important;\
         font-size: 24px !important;\
-        line-height: 130% !important;\
+        line-height: 140% !important;\
       }\
       .entry.u0 {\
         height: 60px !important;\

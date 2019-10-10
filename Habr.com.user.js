@@ -4,7 +4,10 @@
 // @include     https://habr.com/*/post/*
 // @include     https://habr.com/*/company/*
 // @include     https://habr.com/*/news/*
-// @version     4
+// @include     https://habr.com/*/flows/*
+// @include     https://habr.com/*/top/*
+// @include     https://habr.com/*/all/*
+// @version     5
 // @grant       none
 // ==/UserScript==
 !function(){
@@ -70,6 +73,9 @@
       }\
       .sidebar_right .sidebar_content-area {\
         margin-left: -250px !important;\
+      }\
+      li:not([id]).content-list__item.content-list__item_post.shortcuts_item {\
+        display: none !important;\
       }\
      ');
 }();

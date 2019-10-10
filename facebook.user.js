@@ -21,7 +21,7 @@
       #timeline_tab_content > .clearfix > :nth-child(2) {\
         width: 1365px !important;\
       }\
-      div[id^="jumper_"] .userContent {\
+      div[id^="jumper_"] .userContent, div[id^="js_"][data-testid^="post_message"] {\
         font-size: 20px !important;\
         font-family: Noto Sans !important;\
       }\
@@ -29,6 +29,20 @@
         font-size: 17px !important;\
         font-family: Noto Sans !important;\
         line-height: 1.5em !important;\
+      }\
+      /* main page */\
+      #contentCol {\
+        width: unset !important;\
+      }\
+      #contentCol #rightCol {\
+        position: releative !important;\
+        float: right !important;\
+        left: 330px !important;\
+      }\
+      #contentCol #contentArea {\
+        position: unset !important;\
+        float: none !important;\
+        min-width: 1200px !important;\
       }\
      ');
 }();
