@@ -3,7 +3,7 @@
 // @namespace   yandex_market
 // @include     https://market.yandex.ru/*
 // @include     http://market.yandex.ru/*
-// @version     3
+// @version     4
 // @grant       none
 // ==/UserScript==
 !function() {
@@ -25,7 +25,7 @@
   function updateRating(elem, counter, url) {
     return (e) => {
       //console.log("--- updateRating ---");
-      var r = e.target.responseXML.querySelectorAll(".rating-review__count");
+      var r = e.target.responseXML.querySelectorAll("div[data-zone-name='product-rating-stat'] a > div:last-child");
       if (r.length === 5) {
         var cnt = [];
         for (var i = 0; i < r.length; i += 1) {
