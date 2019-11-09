@@ -3,7 +3,7 @@
 // @namespace   yandex_market
 // @include     https://market.yandex.ru/*
 // @include     http://market.yandex.ru/*
-// @version     4
+// @version     5
 // @grant       none
 // ==/UserScript==
 !function() {
@@ -26,20 +26,18 @@
     return (e) => {
       //console.log("--- updateRating ---");
       var r = e.target.responseXML.querySelectorAll("div[data-zone-name='product-rating-stat'] a > div:last-child");
-      if (r.length === 5) {
-        var cnt = [];
-        for (var i = 0; i < r.length; i += 1) {
-          cnt[i] = parseInt(r[i].textContent.split(/\s+/)[0]);
-        }
-        var total = cnt.reduce( (s,v,i,a) => s+v );
-        var p = Math.floor( (cnt[3]+cnt[4])*100/total + 0.5 );
-        var span = elem.parentElement.parentElement.parentElement.querySelector(".n-snippet-card2__reasons-to-buy-item:last-child .n-reasons-to-buy__label");
-        var total2 = span ? parseInt(span.textContent.split(/\s+/)[0]) : 0;
-        var p2 = total2 > 0 ? Math.floor( (cnt[3]+cnt[4])*100/Math.max(total2,total) + 0.5 ) : "&mdash;";
-        elem.innerHTML = `Отрицательных ${p}/${p2}%`;
-        if (p <= RSTAT_THRESHOLD) { elem.style.color = RSTAT_GOOD_COLOR; }
-        counter.cache[url] = {p: p, p2: p2};
+      var cnt = [];
+      for (var i = 0; i < 5; i += 1) {
+        cnt[i] = i < r.length ? parseInt(r[i].textContent.split(/\s+/)[0]) : 0;
       }
+      var total = cnt.reduce( (s,v,i,a) => s+v );
+      var p = Math.floor( (cnt[3]+cnt[4])*100/total + 0.5 );
+      var span = elem.parentElement.parentElement.parentElement.querySelector(".n-snippet-card2__reasons-to-buy-item:last-child .n-reasons-to-buy__label");
+      var total2 = span ? parseInt(span.textContent.split(/\s+/)[0]) : 0;
+      var p2 = total2 > 0 ? Math.floor( (cnt[3]+cnt[4])*100/Math.max(total2,total) + 0.5 ) : "&mdash;";
+      elem.innerHTML = `Отрицательных ${p}/${p2}%`;
+      if (p <= RSTAT_THRESHOLD) { elem.style.color = RSTAT_GOOD_COLOR; }
+      counter.cache[url] = {p: p, p2: p2};
     }
   }
 
