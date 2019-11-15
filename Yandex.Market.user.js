@@ -3,7 +3,7 @@
 // @namespace   yandex_market
 // @include     https://market.yandex.ru/*
 // @include     http://market.yandex.ru/*
-// @version     5
+// @version     6
 // @grant       none
 // ==/UserScript==
 !function() {
@@ -22,18 +22,25 @@
   const RSTAT_GOOD_COLOR = "green";
   const RSTAT_THRESHOLD = 17;
 
+  function get_number(s) {
+    var m = s.replace(/\s+/, "").match(/\d+/);
+    var r = m !== null ? parseInt(m[0]) : 0;
+    //console.log(s, m, r);
+    return r;
+  }
+
   function updateRating(elem, counter, url) {
     return (e) => {
       //console.log("--- updateRating ---");
       var r = e.target.responseXML.querySelectorAll("div[data-zone-name='product-rating-stat'] a > div:last-child");
       var cnt = [];
       for (var i = 0; i < 5; i += 1) {
-        cnt[i] = i < r.length ? parseInt(r[i].textContent.split(/\s+/)[0]) : 0;
+        cnt[i] = i < r.length ? get_number(r[i].textContent) : 0;
       }
       var total = cnt.reduce( (s,v,i,a) => s+v );
       var p = Math.floor( (cnt[3]+cnt[4])*100/total + 0.5 );
       var span = elem.parentElement.parentElement.parentElement.querySelector(".n-snippet-card2__reasons-to-buy-item:last-child .n-reasons-to-buy__label");
-      var total2 = span ? parseInt(span.textContent.split(/\s+/)[0]) : 0;
+      var total2 = span ? get_number(span.textContent) : 0;
       var p2 = total2 > 0 ? Math.floor( (cnt[3]+cnt[4])*100/Math.max(total2,total) + 0.5 ) : "&mdash;";
       elem.innerHTML = `Отрицательных ${p}/${p2}%`;
       if (p <= RSTAT_THRESHOLD) { elem.style.color = RSTAT_GOOD_COLOR; }
