@@ -3,11 +3,11 @@
 // @namespace   yandex_market
 // @include     https://market.yandex.ru/*
 // @include     http://market.yandex.ru/*
-// @version     6
+// @version     7
 // @grant       none
 // ==/UserScript==
 !function() {
-  var links = document.querySelectorAll("a.button_to_prices");
+  var links = document.querySelectorAll("a.button_to_prices, a.link_type_prices, .n-compare-cell a.link");
   for (var i = 0; i < links.length; i += 1) {
     links[i].href += "&how=aprice";
   }
