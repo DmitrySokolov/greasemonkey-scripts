@@ -1,6 +1,6 @@
 ﻿// ==UserScript==
 // @name     Feedly
-// @version  1
+// @version  2
 // @grant    none
 // @include  https://feedly.com/*
 // ==/UserScript==
@@ -64,7 +64,10 @@
       .entry.u0 .condensed-tools {\
         display: block !important;\
       }\
-      .entry.u0 .condensed-tools .tag-button {\
+      .entry.u0 .CondensedToolbar {\
+        display: block !important;\
+      }\
+      .entry.u0 .CondensedToolbar .tag-button {\
         display: none !important;\
       }\
       .u100Entry .entryHeader .shareBarHolder {\
