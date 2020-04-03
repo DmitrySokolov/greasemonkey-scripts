@@ -45,7 +45,7 @@
   font-size: 20px !important;\
   line-height: 125% !important;\
 }\
-.b-topic .b-text .b-video-box:last-of-type {\
+.b-topic .b-text > *:nth-last-child(-n+3) {\
   display: none !important;\
 }\
      ');
