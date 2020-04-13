@@ -2,7 +2,7 @@
 // @name        Lenta.ru
 // @namespace   habr
 // @include     https://lenta.ru/*
-// @version     1
+// @version     2
 // @grant       none
 // ==/UserScript==
 !function(){
@@ -45,7 +45,7 @@
   font-size: 20px !important;\
   line-height: 125% !important;\
 }\
-.b-topic .b-text > *:nth-last-child(-n+3) {\
+.b-topic .b-text > div:nth-last-child(-n+3) {\
   display: none !important;\
 }\
      ');
