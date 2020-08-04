@@ -21,3 +21,5 @@ Enhancements in the Inline Viewer:
 Enhancements:
 * Sort by price (by default)
 * Into the Card view added the ratio of negative reviews (among reviewers / among buyers)
+
+![Yandex.Market additional stat](images/Yandex.Market.png)
