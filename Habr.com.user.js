@@ -7,7 +7,7 @@
 // @include     https://habr.com/*/flows/*
 // @include     https://habr.com/*/top/*
 // @include     https://habr.com/*/all/*
-// @version     5
+// @version     6
 // @grant       none
 // ==/UserScript==
 !function(){
@@ -60,11 +60,12 @@
     var newStyle = D.createElement('style');
     newStyle.textContent = cssStr;
     elem.appendChild(newStyle);
-  } ('.post__text {\
+  } ('.post__body .post__text, .post__body .post__text_v2 p {\
         font-family: Noto Sans !important;\
         font-size: 20px !important;\
+        line-height: unset !important;\
       }\
-      .post__text h3 {\
+      .post__body .post__text h3, .post__body .post__text_v2 h3 {\
         font-family: Noto Sans !important;\
         font-size: 1.2em !important;\
       }\
