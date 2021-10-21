@@ -1,12 +1,7 @@
 // ==UserScript==
 // @name        Habr.com
 // @namespace   habr
-// @include     https://habr.com/*/post/*
-// @include     https://habr.com/*/company/*
-// @include     https://habr.com/*/news/*
-// @include     https://habr.com/*/flows/*
-// @include     https://habr.com/*/top/*
-// @include     https://habr.com/*/all/*
+// @include     https://habr.com/*
 // @version     6
 // @grant       none
 // ==/UserScript==
@@ -15,7 +10,7 @@
     return cbody.querySelector('.replies_switch');
   }
   function getReplies(cbody) {
-    return cbody.parentElement.querySelector('.content-list_nested-comments');
+    return cbody.parentElement.querySelector('.tm-comment-thread-functional__children');
   }
   function toggleReplies(cbody) {
     var btn = getSwitch(cbody);
@@ -29,7 +24,7 @@
     }
   }
   function handleSwitchClicks(e) {
-    toggleReplies(e.target.parentElement);
+    toggleReplies(e.target.parentElement.parentElement.parentElement);
     e.stopPropagation();
   }
   function appendSwitch(cbody) {
@@ -46,11 +41,11 @@
     cbody.appendChild(elem);
   }
   !function main() {
-    var clist = document.querySelectorAll('#comments-list li.content-list__item_comment');
+    var clist = document.querySelectorAll('.tm-article-comments section.tm-comment');
     for (var i = 0; i < clist.length; i += 1) {
-      var crepl = clist[i].querySelector('.content-list_nested-comments');
-      if (crepl.querySelector('li')) {
-        appendSwitch(clist[i].querySelector('.comment'));
+      var crepl = clist[i].querySelector('.tm-comment-thread-functional__children');
+      if (crepl) {
+        appendSwitch(clist[i].querySelector('.tm-comment'));
       }
     }
   }();
@@ -60,22 +55,24 @@
     var newStyle = D.createElement('style');
     newStyle.textContent = cssStr;
     elem.appendChild(newStyle);
-  } ('.post__body .post__text, .post__body .post__text_v2 p {\
+  } ('#post-content-body > div, #post-content-body > div p {\
         font-family: Noto Sans !important;\
-        font-size: 20px !important;\
+        font-size: 24px !important;\
         line-height: unset !important;\
       }\
-      .post__body .post__text h3, .post__body .post__text_v2 h3 {\
+      #post-content-body > div h3 {\
         font-family: Noto Sans !important;\
         font-size: 1.2em !important;\
       }\
-      .layout__cell_body {\
-        max-width: 1750px !important;\
+			.tm-comment__body-content div, .tm-comment__body-content p {\
+        font-family: Noto Sans !important;\
+        font-size: 20px !important;\
+        line-height: 130% !important;\
       }\
-      .sidebar_right .sidebar_content-area {\
-        margin-left: -250px !important;\
+      .tm-page-width, .tm-article-sticky-panel__icons, .tm-article-presenter__footer, .tm-article-comments {\
+        max-width: 1780px !important;\
       }\
-      li:not([id]).content-list__item.content-list__item_post.shortcuts_item {\
+      .tm-scroll-top, .tm-editoral-subscription {\
         display: none !important;\
       }\
      ');
