@@ -3,18 +3,39 @@
 // @namespace   yandex_market
 // @include     https://market.yandex.ru/*
 // @include     http://market.yandex.ru/*
-// @version     8
+// @version     11
 // @grant       none
 // ==/UserScript==
 !function() {
-  let links = document.querySelectorAll("a.button_to_prices, a.link_type_prices, .n-compare-cell a.link");
-  for (let a of links) {
-    a.href += "&how=aprice";
-  }
-  var btn = document.querySelector("li.n-product-tabs__item_name_offers a");
-  if (btn) {
-    btn.href += "&how=aprice";
-  }
+
+  !function addStyle(cssStr) {
+    var D = document;
+    var elem = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
+    var newStyle = D.createElement('style');
+    newStyle.textContent = cssStr;
+    elem.appendChild(newStyle);
+  }('\
+		div[data-apiary-widget-id*="/offersCarousel"] {\
+  		display: none !important;\
+		}\
+		div[data-apiary-widget-id*="/madvBasicCarousel"] {\
+  		display: none !important;\
+		}\
+			div[data-apiary-widget-id*="/madvCasualCarousel"] {\
+  		display: none !important;\
+		}\
+	');
+
+  !function fixUrls() {
+  	let links = document.querySelectorAll("a.button_to_prices, a.link_type_prices, .n-compare-cell a.link");
+  	for (let a of links) {
+    	a.href += "&how=aprice";
+  	}
+  	var btn = document.querySelector("li.n-product-tabs__item_name_offers a");
+  	if (btn) {
+	    btn.href += "&how=aprice";
+	  }
+  }();
 
   const RSTAT = "rstat";
   const RSTAT_INIT_VAL = "??%";
@@ -23,23 +44,29 @@
   const RSTAT_THRESHOLD = 17;
 
   function findProductCardTitles() {
-    return document.querySelectorAll("[data-zone-name='snippet-card'] [data-zone-name='title']");
+    const nodes_ = document.querySelectorAll("[data-zone-name='snippet-card'] [data-zone-name='title']");
+    console.log(`-- found '${nodes_.length}' cards`);
+    return nodes_;
   }
 
-  function findRatingLink(title_block) {
-    return title_block.querySelector("a[data-zone-name='rating']");
+  function findRatingUrl(title_block) {
+    let a = title_block.querySelector("h3 a");
+    return a ? (a.href.split("?")[0] + "/reviews") : "";
   }
 
   function findBuyCount(title_block) {
-    let elem = title_block.parentElement.querySelector(":scope > div:last-child > div:last-child");
+    let elem = title_block.querySelector("[data-auto='rating-badge']+span");
     return elem ? getNumber(elem.textContent) : 0;
   }
 
   function getProductRatingStat(responseXML) {
     let r = responseXML.querySelectorAll("div[data-zone-name='product-rating-stat'] a > div:last-child");
-    let cnt = [];
-    for (let i = 0; i < 5; i += 1) {
-      cnt[i] = i < r.length ? getNumber(r[i].textContent) : 0;
+    //console.log(responseXML);
+    //console.log(r);
+    let cnt = [0,0,0,0,0];
+    for (let rate of r) {
+      c = getNumber(rate.parentElement.querySelector("div[data-rate]").attributes["data-rate"].textContent);
+      cnt[5-c] = getNumber(rate.textContent)
     }
     return cnt;
   }
@@ -52,13 +79,16 @@
 
   function updateRating(elem, counter, url) {
     return (e) => {
-      //console.log("--- updateRating ---");
+      console.log("--- updateRating ---");
+      console.log(`URL: ${url}`);
       let cnt = getProductRatingStat(e.target.responseXML);
-      //console.log(cnt);
+      console.log(cnt);
       let total = cnt.reduce( (s,v,i,a) => s+v );
       let p = Math.floor( (cnt[3]+cnt[4])*100/total + 0.5 );
-      let total2 = findBuyCount(elem.parentElement);
+      console.log(`total=${total}, ${p}%`);
+      let total2 = findBuyCount(e.target.responseXML);
       let p2 = total2 > 0 ? Math.floor( (cnt[3]+cnt[4])*100/Math.max(total2,total) + 0.5 ) : "&mdash;";
+      console.log(`total2=${total2}, ${p2}%`);
       elem.innerHTML = `Отрицательных ${p}/${p2}%`;
       if (p <= RSTAT_THRESHOLD) { elem.style.color = RSTAT_GOOD_COLOR; }
       counter.cache[url] = {p: p, p2: p2};
@@ -66,20 +96,21 @@
   }
 
   function updateProductCard(title_block, counter) {
-    let a = findRatingLink(title_block);
-    if (a) {
-      let url = a.href.split("?")[0];
+    let url = findRatingUrl(title_block);
+    if (url.length > 0) {
       let cached = counter.cache[url] ? true : false;
       let el = document.createElement("span");
+      //console.log(`--- URL: ${url}`);
       el.className = RSTAT;
       el.innerHTML = cached ? `Отрицательных ${counter.cache[url].p}/${counter.cache[url].p2}%` : RSTAT_INIT_VAL;
       el.style.color = cached && counter.cache[url].p <= RSTAT_THRESHOLD ? RSTAT_GOOD_COLOR : RSTAT_INIT_COLOR;
-      el.style.marginLeft = ".5em";
-      title_block.appendChild(el);
+      el.style.marginLeft = "0em";
+      el.style.display = "block";
+      title_block.querySelector("h3").appendChild(el);
       if (!cached) {
-        setTimeout((el_, a_, c_, url_) => {
+        setTimeout((el_, orig_url_, c_, url_) => {
           let req = new XMLHttpRequest();
-          req.open("GET", a_.href, /*async*/true);
+          req.open("GET", orig_url_, /*async*/true);
           req.responseType = "document";
           req.addEventListener("load", updateRating(el_, c_, url_), false);
           req.addEventListener("loadend", (e) => {
@@ -87,14 +118,16 @@
             //console.log(`-- status: ${e.target.status}, counter: ${c_.val} / ${c_.max}`);
           }, false);
           req.send();
-        }, Math.random()*300+200, el, a, counter, url);
+        }, Math.random()*300+200, el, url, counter, url);
         counter.max += 1;
     	}
+    } else {
+      console.log(`-- could not find rating URL`, title_block);
     }
   }
 
   function startUpdating(counter) {
-    //console.log("--- startUpdating ---");
+    console.log("--- startUpdating ---");
     counter.max = 0;
     counter.val = 0;
     let titles = findProductCardTitles();
@@ -109,8 +142,11 @@
   }
 
   function startObserving(o) {
-    let n = document.querySelector("[data-apiary-widget-id='/content/results']");
-    o.observe(n, {attributes: false, childList: true, subtree: true});
+    console.log("--- startObserving ---");
+    setTimeout((o_) => {
+      let n = document.querySelector("[data-apiary-widget-name='@marketfront/SearchSerp']");
+      o_.observe(n, {attributes: false, childList: true, subtree: true});
+    }, 0, o);
   }
 
   var counter = {val: 0, max: 0, cache: {}};
@@ -118,11 +154,11 @@
   startUpdating(counter);
 
   startObserving(new MutationObserver((mutationsList, observer) => {
-    //console.log("--- mutaion ---");
+    console.log("--- mutaion ---");
     let isOwnChange = mutationsList.some(record => { return record.target.classList.contains(RSTAT); });
     //console.log(`ownChange: ${isOwnChange}, counter: ${counter.val} / ${counter.max}`);
     if (!isOwnChange && counter.val == counter.max && counter.max > 0) {
-      //console.log("--- re-init ---");
+      console.log("--- re-init ---");
       observer.disconnect();
       setTimeout((c_, o_) => {
         startUpdating(c_);

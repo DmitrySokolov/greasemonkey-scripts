@@ -2,7 +2,8 @@
 // @name        Rbc.ru
 // @namespace   habr
 // @include     https://www.rbc.ru/*
-// @version     1
+// @include     https://*.rbc.ru/*
+// @version     2
 // @grant       none
 // ==/UserScript==
 !function(){
@@ -23,7 +24,7 @@
   top: 0px !important;\
 }\
 .l-col-main .l-col-center-590 {\
-  max-width: unset !important;\
+  max-width: 900px !important;\
 }\
 .l-col-right .l-col-100h-parent {\
   display: none !important;\
@@ -31,6 +32,12 @@
 .article__text, .article__text p {\
   font-size: 22px !important;\
   line-height: 130% !important;\
+}\
+.article__text .pro-anons {\
+  display: none !important;\
+}\
+.social-onboarding-place {\
+  display: none !important;\
 }\
      ');
 }();

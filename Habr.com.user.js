@@ -2,7 +2,7 @@
 // @name        Habr.com
 // @namespace   habr
 // @include     https://habr.com/*
-// @version     6
+// @version     7
 // @grant       none
 // ==/UserScript==
 !function(){
@@ -55,22 +55,34 @@
     var newStyle = D.createElement('style');
     newStyle.textContent = cssStr;
     elem.appendChild(newStyle);
-  } ('#post-content-body > div, #post-content-body > div p {\
+  } ('#post-content-body > div, #post-content-body > div p, #post-content-body > div div {\
         font-family: Noto Sans !important;\
         font-size: 24px !important;\
-        line-height: unset !important;\
+        line-height: 36px !important;\
+      }\
+      #post-content-body > div img {\
+        background-color: #ffffff99 !important;\
+      }\
+      #post-content-body > div h2 {\
+        font-family: Noto Sans !important;\
+        font-size: 30px !important;\
+        font-weight: 600;\
       }\
       #post-content-body > div h3 {\
         font-family: Noto Sans !important;\
-        font-size: 1.2em !important;\
+        font-size: 30px !important;\
       }\
-			.tm-comment__body-content div, .tm-comment__body-content p {\
+      #post-content-body > div h4, #post-content-body > div h5 {\
+        font-family: Noto Sans !important;\
+        font-size: 28px !important;\
+      }\
+			.tm-comment__body-content, .tm-comment__body-content div, .tm-comment__body-content p {\
         font-family: Noto Sans !important;\
         font-size: 20px !important;\
         line-height: 130% !important;\
       }\
       .tm-page-width, .tm-article-sticky-panel__icons, .tm-article-presenter__footer, .tm-article-comments {\
-        max-width: 1780px !important;\
+        max-width: 1256px !important;\
       }\
       .tm-scroll-top, .tm-editoral-subscription {\
         display: none !important;\

@@ -1,6 +1,6 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name     Feedly
-// @version  2
+// @version  3
 // @grant    none
 // @include  https://feedly.com/*
 // ==/UserScript==
@@ -33,33 +33,56 @@
         line-height: 140% !important;\
       }\
       .entry.u0 {\
-        height: 60px !important;\
+        height: 78px !important;\
       }\
-      .entry.u0 .content {\
+      .entry.u0 .TitleOnlyEntry__toolbar {\
+        display: flex !important;\
+        min-width: 2rem !important;\
+        padding-left: 0.5rem !important;\
+        padding-right: 0 !important;\
+      }\
+      .entry.u0 .TitleOnlyEntry__toolbar .tag-button {\
+        display: none !important;\
+      }\
+      .entry.u0 .TitleOnlyEntry__toolbar button {\
+        display: inline-flex !important;\
+      }\
+      .entry.u0 .TitleOnlyLayout {\
+        height: unset !important;\
+      }\
+      .entry.u0 .TitleOnlyLayout__content {\
         flex-direction: column !important;\
         align-items: start !important;\
       }\
-      .entry.u0 .content > * {\
+      .entry.u0 .TitleOnlyLayout__content * {\
         font-family: Noto Sans !important;\
         font-size: 16px !important;\
+        width: 100% !important;\
       }\
-      .entry.u0 .content > a {\
+      .entry.u0 .TitleOnlyLayout__title > a {\
         width: 100% !important;\
         display: flex !important;\
         justify-content: space-between;\
       }\
-      .entry.u0 .content > a:after {\
+      .entry.u0 .TitleOnlyLayout__title > a:after {\
         content: "⇨";\
         opacity: 1;\
       }\
-        .entry.u0 .content > a:hover:after {\
+        .entry.u0 .TitleOnlyLayout__title > a:hover:after {\
         opacity: 1;\
       }\
-      .entry.u0 .ago {\
+      .entry.u0 .EntrySummary > div {\
+        height: 36px !important;\
+        white-space: normal !important;\
+      }\
+      .entry.u0 .TitleOnlyLayout__date {\
         min-width: 2rem !important;\
         padding-left: 0.5rem !important;\
         padding-right: 0 !important;\
         text-align: right !important;\
+      }\
+      .entry.u0:hover .TitleOnlyLayout__date {\
+        display: none !important;\
       }\
       .entry.u0 .condensed-tools {\
         display: block !important;\
